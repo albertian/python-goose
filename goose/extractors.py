@@ -233,7 +233,6 @@ class ContentExtractor(object):
         doc = article.doc
         topNode = None
         nodesToCheck = self.getNodesToCheck(doc)
-
         startingBoost = float(1.0)
         cnt = 0
         i = 0
@@ -259,7 +258,7 @@ class ContentExtractor(object):
                     boostScore = float((1.0 / startingBoost) * 50)
                     startingBoost += 1
             # numberOfNodes
-            if numberOfNodes > 15:
+            if numberOfNodes > 150:
                 if (numberOfNodes - i) <= bottomNodesForNegativeScore:
                     booster = float(bottomNodesForNegativeScore - (numberOfNodes - i))
                     boostScore = float(-pow(booster, float(2)))
