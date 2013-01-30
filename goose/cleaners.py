@@ -65,6 +65,7 @@ class DocumentCleaner(object):
         docToClean = article.doc
         docToClean = self.removeListsWithLinks(docToClean)
         docToClean = self.cleanEmTags(docToClean)
+        docToClean = self.cleanStrongTags(docToClean)
         docToClean = self.removeDropCaps(docToClean)
         docToClean = self.removeScriptsAndStyles(docToClean)
         docToClean = self.cleanBadTags(docToClean)
@@ -101,7 +102,13 @@ class DocumentCleaner(object):
             if len(images) == 0:
                 node.drop_tag()
         return doc
-
+    def cleanStrongTags(self,doc):
+        ems = Parser.getElementsByTag(doc, tag='strong')
+        for node in ems:
+            images = Parser.getElementsByTag(node, tag='img')
+            if len(images) == 0:
+                node.drop_tag()
+        return doc
     def removeDropCaps(self, doc):
         items = doc.cssselect("span[class~=dropcap], span[class~=drop_cap]")
         for item in items:

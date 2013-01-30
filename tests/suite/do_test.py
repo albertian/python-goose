@@ -106,7 +106,6 @@ def checkfile(fname, f):
     else:
         html = getrawhtml(fname)
         html = gettext(extractors[EXTRACTOR](html))
-
     lost_words = 0;
     lost_len = 0;
     excess_words = len(html.split())
@@ -207,7 +206,7 @@ def test():
     etime = time.time();
     f.close()
     truncated -= low_loss
-
+    
     print "Total amount: %d words %d chars" % (total_words,total_len)
     print "Lost: %d words %d chars" % (lost_words,lost_len)
     print "Excess: %d words %d chars" % (excess_words,excess_len)

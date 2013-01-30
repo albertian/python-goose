@@ -48,6 +48,8 @@ class Goose(object):
         Main method to extract an article object from a URL,
         pass in a url and get back a Article
         """
+        #######ATTENTION PRINT###########
+        #print rawHTML[0:15000]
         cc = CrawlCandidate(self.config, url, rawHTML)
         return self.sendToActor(cc)
 

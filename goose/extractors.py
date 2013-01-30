@@ -233,6 +233,8 @@ class ContentExtractor(object):
         doc = article.doc
         topNode = None
         nodesToCheck = self.getNodesToCheck(doc)
+        ###########ATTENTION PRINT######################
+        #print "Extractor.calculateBestNodeBasedOnClustering: namber nodestocheck="+str(len(nodesToCheck))
         startingBoost = float(1.0)
         cnt = 0
         i = 0
@@ -247,6 +249,8 @@ class ContentExtractor(object):
                 nodesWithText.append(node)
 
         numberOfNodes = len(nodesWithText)
+        ###########ATTENTION######################
+        #print "Extractor.calculateBestNodeBasedOnClustering: namber of nodes with text="+str(numberOfNodes)
         negativeScoring = 0
         bottomNodesForNegativeScore = float(numberOfNodes) * 0.25
 

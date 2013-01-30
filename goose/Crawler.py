@@ -52,16 +52,13 @@ class Crawler(object):
 
         parseCandidate = URLHelper.getCleanedUrl(crawlCandidate.url)
         rawHtml = self.getHTML(crawlCandidate, parseCandidate)
-
         if rawHtml is None:
             return article
-
         doc = self.getDocument(parseCandidate.url, rawHtml)
 
         extractor = self.getExtractor()
         docCleaner = self.getDocCleaner()
         outputFormatter = self.getOutputFormatter()
-
         # article
         article.finalUrl = parseCandidate.url
         article.linkhash = parseCandidate.linkhash
@@ -81,7 +78,6 @@ class Crawler(object):
         article.tags = extractor.extractTags(article)
         # # before we do any calcs on the body itself let's clean up the document
         article.doc = docCleaner.clean(article)
-
         # big stuff
         article.topNode = extractor.calculateBestNodeBasedOnClustering(article)
         if article.topNode is not None:
