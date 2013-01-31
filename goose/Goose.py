@@ -24,7 +24,7 @@ import os
 from goose.Configuration import Configuration
 from goose.Crawler import CrawlCandidate
 from goose.Crawler import Crawler
-
+from goose.parsers import Parser
 
 class Goose(object):
     """\
@@ -51,6 +51,7 @@ class Goose(object):
         #######ATTENTION PRINT###########
         #print rawHTML[0:15000]
         cc = CrawlCandidate(self.config, url, rawHTML)
+
         return self.sendToActor(cc)
 
     def shutdownNetwork(self):
@@ -59,6 +60,7 @@ class Goose(object):
     def sendToActor(self, crawlCandiate):
         crawler = Crawler(self.config)
         article = crawler.crawl(crawlCandiate)
+        #Parser.getText2(article.doc)
         return article
 
     def initializeEnvironment(self):

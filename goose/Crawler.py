@@ -77,9 +77,12 @@ class Crawler(object):
         article.domain = extractor.getDomain(article.finalUrl)
         article.tags = extractor.extractTags(article)
         # # before we do any calcs on the body itself let's clean up the document
+
         article.doc = docCleaner.clean(article)
+        
         # big stuff
         article.topNode = extractor.calculateBestNodeBasedOnClustering(article)
+        
         if article.topNode is not None:
             # TODO
             # movies and images
@@ -90,10 +93,11 @@ class Crawler(object):
 
             article.topNode = extractor.postExtractionCleanup(article.topNode)
             article.cleanedArticleText = outputFormatter.getFormattedText(article)
+            #print article.cleanedArticleText
 
         # cleanup tmp file
         self.releaseResources(article)
-
+        #Parser.getText2(doc)
         return article
 
     def getHTML(self, crawlCandidate, parsingCandidate):

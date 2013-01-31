@@ -63,6 +63,7 @@ class DocumentCleaner(object):
     def clean(self, article):
 
         docToClean = article.doc
+
         docToClean = self.removeListsWithLinks(docToClean)
         docToClean = self.cleanEmTags(docToClean)
         docToClean = self.cleanStrongTags(docToClean)
@@ -76,8 +77,11 @@ class DocumentCleaner(object):
         docToClean = self.removeNodesViaRegEx(docToClean, self.facebookBroadcastingPattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.twitterPattern)
         docToClean = self.cleanUpSpanTagsInParagraphs(docToClean)
-        docToClean = self.convertDivsToParagraphs(docToClean, 'div')
         docToClean = self.convertDivsToParagraphs(docToClean, 'span')
+        docToClean = self.convertDivsToParagraphs(docToClean, 'div')
+        
+        
+
         return docToClean
 
     def removeListsWithLinks(self, doc):
@@ -248,20 +252,31 @@ class DocumentCleaner(object):
         elseDivs = 0
         divs = Parser.getElementsByTag(doc, tag=domType)
         tags = ['a', 'blockquote', 'dl', 'div', 'img', 'ol', 'p', 'pre', 'table', 'ul']
+        i=0
+        #if domType=='div':
+        #    print "number of divs total="+str(len(divs))
 
         for div in divs:
+            
             items = Parser.getElementsByTags(div, tags)
             if div is not None and len(items) == 0:
                 self.replaceElementsWithPara(doc, div)
                 badDivs += 1
             elif div is not None:
                 replaceNodes = self.getReplacementNodes(doc, div)
+                #Parser.getText2(div)
                 div.clear()
-
+                if domType=='div':
+                    i+=1
+                    
+                
                 for c, n in enumerate(replaceNodes):
                     div.insert(c, n)
 
                 elseDivs += 1
+        ########ATTENTION PRINT##########
+        #if domType=='div':
+        #    print "i="+str(i)   
 
         return doc
 

@@ -67,6 +67,7 @@ def getrawhtml(fname):
 
 def gettext(html):
     text = html.encode('ascii', 'replace')
+    #print text
     text = re.sub('[.?,\'\t\r\n]',' ',text)
     text = text.split()
     text = ' '.join(text)
