@@ -63,13 +63,12 @@ class DocumentCleaner(object):
     def clean(self, article):
 
         docToClean = article.doc
-
+        docToClean = self.cleanBadTags(docToClean)
         docToClean = self.removeListsWithLinks(docToClean)
         docToClean = self.cleanEmTags(docToClean)
         docToClean = self.cleanStrongTags(docToClean)
         docToClean = self.removeDropCaps(docToClean)
         docToClean = self.removeScriptsAndStyles(docToClean)
-        docToClean = self.cleanBadTags(docToClean)
         docToClean = self.removeNodesViaRegEx(docToClean, self.captionPattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.googlePattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.entriesPattern)
