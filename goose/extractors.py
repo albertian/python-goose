@@ -247,14 +247,16 @@ class ContentExtractor(object):
             highLinkDensity = self.isHighLinkDensity(node)
             if wordStats.getStopWordCount() > 2 and not highLinkDensity:
                 nodesWithText.append(node)
+                
 
         numberOfNodes = len(nodesWithText)
         ###########ATTENTION######################
         #print "Extractor.calculateBestNodeBasedOnClustering: namber of nodes with text="+str(numberOfNodes)
         negativeScoring = 0
-        bottomNodesForNegativeScore = float(numberOfNodes) * 0.25
-
+        bottomNodesForNegativeScore = float(numberOfNodes) * 0.2
+        
         for node in nodesWithText:
+            #Parser.getText2(node)
             boostScore = float(0)
             # boost
             if(self.isOkToBoost(node)):
@@ -494,7 +496,11 @@ class ContentExtractor(object):
 
         subParagraphs2 = Parser.getElementsByTag(e, tag='p')
         if len(subParagraphs2) == 0 and e.tag is not "td":
+            if e.tag=='table':
+                print "sasai"
+            print "ne sasai"
             return True
+        print "ne sasai sovsem"
         return False
 
     def isNodeScoreThreshholdMet(self, node, e):

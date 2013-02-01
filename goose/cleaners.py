@@ -35,12 +35,12 @@ class DocumentCleaner(object):
         "|tags|socialnetworking|socialNetworking|cnnStryHghLght"
         "|cnn_stryspcvbx|^inset$|pagetools|post-attributes"
         "|welcome_form|contentTools2|the_answers"
-        "|communitypromo|runaroundLeft|subscribe|vcard|articleheadings"
+        "|communitypromo|runaroundLeft|subscribe|articleheadings"
         "|date|^print$|popup|author-dropdown|tools|socialtools|byline"
         "|konafilter|KonaFilter|breadcrumbs|^fn$|wp-caption-text"
         "|source|legende|ajoutVideo|timestamp"
         )
-        self.regExNotRemoveNodes = ("and|no|article|body|column|main|shadow")
+        self.regExNotRemoveNodes = ("and|no|article|body|column|main|shadow|table")
         self.regexpNS = "http://exslt.org/regular-expressions"
         self.queryNaughtyIDs = "//*[re:test(@id, '%s', 'i')]" % self.regExRemoveNodes
         self.queryNaughtyClasses = "//*[re:test(@class, '%s', 'i')]" % self.regExRemoveNodes
