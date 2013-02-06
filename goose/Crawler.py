@@ -77,12 +77,12 @@ class Crawler(object):
         article.domain = extractor.getDomain(article.finalUrl)
         article.tags = extractor.extractTags(article)
         # # before we do any calcs on the body itself let's clean up the document
-        #Parser.getText2(article.doc)
+        #Parser.getText3(article.doc)
         article.doc = docCleaner.clean(article)
-        #Parser.getText2(article.doc)
+        #Parser.getText3(article.doc)
         # big stuff
         article.topNode = extractor.calculateBestNodeBasedOnClustering(article)
-        #Parser.getText2(article.doc)
+        #Parser.getText3(article.topNode)
         #normal yet
         if article.topNode is not None:
             # TODO
@@ -91,16 +91,18 @@ class Crawler(object):
             if self.config.enableImageFetching:
                 imageExtractor = self.getImageExtractor(article)
                 article.topImage = imageExtractor.getBestImage(article.rawDoc, article.topNode)
-            #Parser.getText2(article.doc)
-            #normal yet
+            #Parser.getText3(article.topNode)
+            #
+
             article.topNode = extractor.postExtractionCleanup(article.topNode)
-            #Parser.getText2(article.doc)
+            #Parser.getText3(article.topNode)
             article.cleanedArticleText = outputFormatter.getFormattedText(article)
+            #Parser.getText3(outputFormatter.getTopNode())
             
 
         # cleanup tmp file
         self.releaseResources(article)
-        #Parser.getText2(article.topNode)
+        #Parser.getText3(article.topNode)
         #Parser.getText2(article.doc)
         return article
 

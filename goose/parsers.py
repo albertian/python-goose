@@ -25,6 +25,7 @@ from lxml import etree
 from copy import deepcopy
 from goose.text import innerTrim
 from goose.text import encodeValue
+import codecs
 
 
 class Parser(object):
@@ -98,8 +99,8 @@ class Parser(object):
         for c, n in enumerate(list(root)):
             idx = root.index(n)
             # don't process texts nodes
-            if n.tag == 'text':
-                continue
+            #if n.tag == 'text':
+            #    continue
             # create a text node for tail
             if n.tail:
                 t = self.createElement(tag='text', text=n.tail, tail=None)
@@ -163,6 +164,16 @@ class Parser(object):
         return innerTrim(u' '.join(txts).strip())
     @classmethod
     def getText2(self, node):
+        txts = [i for i in node.itertext()]
+        ###########ATTENTION PRINT######################
+        f = codecs.open("log.txt",'wb','utf-8')
+        for line in txts:
+            f.write(line)
+        f.close()
+        #print txts
+        return innerTrim(u' '.join(txts).strip())
+    @classmethod
+    def getText3(self, node):
         txts = [i for i in node.itertext()]
         ###########ATTENTION PRINT######################
         print txts

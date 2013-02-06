@@ -65,9 +65,11 @@ class OutputFormatter(object):
             txts.append(innerTrim(txt))
         for node in list(self.getTopNode()):
             txt = Parser.getText(node)
+            #print txt
             if txt:
                 txt = HTMLParser().unescape(txt)
                 txts.append(innerTrim(txt))
+        #print txts
         return '\n\n'.join(txts)
 
     def convertLinksToText(self):

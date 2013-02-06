@@ -60,7 +60,7 @@ class Goose(object):
     def sendToActor(self, crawlCandiate):
         crawler = Crawler(self.config)
         article = crawler.crawl(crawlCandiate)
-        #Parser.getText2(article.doc)
+        #Parser.getText3(article.topNode)
         return article
 
     def initializeEnvironment(self):

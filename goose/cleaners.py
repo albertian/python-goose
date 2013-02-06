@@ -41,6 +41,7 @@ class DocumentCleaner(object):
         "|source|legende|ajoutVideo|timestamp"
         )
         self.regExNotRemoveNodes = ("and|no|article|body|column|main|shadow|table")
+        self.regExImportantToDeleteNodes = ("noprint")
         self.regexpNS = "http://exslt.org/regular-expressions"
         self.queryNaughtyIDs = "//*[re:test(@id, '%s', 'i')]" % self.regExRemoveNodes
         self.queryNaughtyClasses = "//*[re:test(@class, '%s', 'i')]" % self.regExRemoveNodes
@@ -48,6 +49,7 @@ class DocumentCleaner(object):
         self.queryNaughtyIDs1 = "//*[re:test(@id, '%s', 'i')]" % self.regExNotRemoveNodes
         self.queryNaughtyClasses1 = "//*[re:test(@class, '%s', 'i')]" % self.regExNotRemoveNodes
         self.queryNaughtyNames1 = "//*[re:test(@name, '%s', 'i')]" % self.regExNotRemoveNodes
+        self.queryNaughtyClassesMustDelete = "//*[re:test(@class, '%s', 'i')]" % self.regExImportantToDeleteNodes
         self.divToPElementsPattern = r"<(a|blockquote|dl|div|img|ol|p|pre|table|ul)"
         self.captionPattern = "^caption$"
         self.googlePattern = " google "
@@ -152,9 +154,12 @@ class DocumentCleaner(object):
                                         namespaces={'re': self.regexpNS})
         naughtyClasses1 = doc.xpath(self.queryNaughtyClasses1,
                                         namespaces={'re': self.regexpNS})
+        naughtyClassesDelete = doc.xpath(self.queryNaughtyClassesMustDelete,
+                                        namespaces={'re': self.regexpNS})
         for node in naughtyClasses:
             if node not in naughtyClasses1: Parser.remove(node)
-
+        for node in naughtyClassesDelete:
+            Parser.remove(node)
         # name
         naughtyNames = doc.xpath(self.queryNaughtyNames,
                                         namespaces={'re': self.regexpNS})
@@ -254,16 +259,20 @@ class DocumentCleaner(object):
         i=0
         #if domType=='div':
         #    print "number of divs total="+str(len(divs))
-
+        #if domType=='div':   
+        #    Parser.getText3(doc)
         for div in divs:
-            
+            #if domType=='div':   
+                #Parser.getText3(div)
             items = Parser.getElementsByTags(div, tags)
             if div is not None and len(items) == 0:
                 self.replaceElementsWithPara(doc, div)
                 badDivs += 1
             elif div is not None:
                 replaceNodes = self.getReplacementNodes(doc, div)
-                #Parser.getText2(div)
+                #print "="*50
+                #Parser.getText3(div)
+                #print "*"*50
                 div.clear()
                 if domType=='div':
                     i+=1
@@ -275,8 +284,9 @@ class DocumentCleaner(object):
                 elseDivs += 1
         ########ATTENTION PRINT##########
         #if domType=='div':
-        #    print "i="+str(i)   
-
+            #print "i="+str(i)
+        #if domType=='div':   
+            #Parser.getText3(doc)
         return doc
 
 
