@@ -467,12 +467,14 @@ class ContentExtractor(object):
         numberOfLinkWords = float(len(linkWords))
         numberOfLinks = float(len(links))
         linkDivisor = float(numberOfLinkWords / numberOfWords)
-        score = float(linkDivisor * numberOfLinks)
+        #score = float(linkDivisor * numberOfLinks)
+        score=float((numberOfLinks**2)*numberOfLinkWords/numberOfWords)
         ##########CHANGED################
         #################################
         #################################
-        if score >= 1.4:
-            #print 50*"="+str(score)
+        if score >= 5:
+            #if score<2.1:
+            #print 20*"="+str(score)+" words="+str(numberOfWords)+ " links="+str(numberOfLinks)+" link words="+str(numberOfLinkWords)
             #Parser.getText3(e)
             #print 50*"="
             return True
@@ -512,11 +514,7 @@ class ContentExtractor(object):
 
         subParagraphs2 = Parser.getElementsByTag(e, tag='p')
         if len(subParagraphs2) == 0 and e.tag is not "td":
-            #if e.tag=='table':
-                #print "sasai"
-            #print "ne sasai"
             return True
-        #print "ne sasai sovsem"
         return False
 
     def isNodeScoreThreshholdMet(self, node, e):
@@ -525,19 +523,13 @@ class ContentExtractor(object):
         thresholdScore = float(topNodeScore * .08)
 
         if topNodeScore < 0 and currentNodeScore < 0:
-            #print "udalim1"
             return True
 
         if not Parser.getElementsByTag(e, tag='a') and not Parser.getElementsByTag(e, tag='img'):
             self.updateScore(e, 11)
-            #print "udalim2"
             return True
-        #print "udalim_x3"
-        #print str(currentNodeScore)+" "+str(thresholdScore)
         if (currentNodeScore < thresholdScore) and e.tag != 'td' and e.tag!='table':
-            #print "sasai eto ne table"
             return False
-        #print " ne udalim"
         return True
 
     def postExtractionCleanup(self, targetNode):
@@ -552,7 +544,6 @@ class ContentExtractor(object):
                 if self.isHighLinkDensity(e) \
                     or self.isTableTagAndNoParagraphsExist(e) \
                     or not self.isNodeScoreThreshholdMet(node, e):
-                        #print "udalim!"
                         Parser.remove(e)
 
         for e in reversed(node):

@@ -77,12 +77,12 @@ class Crawler(object):
         article.domain = extractor.getDomain(article.finalUrl)
         article.tags = extractor.extractTags(article)
         # # before we do any calcs on the body itself let's clean up the document
-        #Parser.getText3(article.doc)
+        #Parser.getText2(article.doc)
         article.doc = docCleaner.clean(article)
-        #Parser.getText3(article.doc)
+        Parser.getText2(article.doc)
         # big stuff
         article.topNode = extractor.calculateBestNodeBasedOnClustering(article)
-        #Parser.getText3(article.topNode)
+        #Parser.getText2(article.topNode)
         #normal yet
         if article.topNode is not None:
             # TODO

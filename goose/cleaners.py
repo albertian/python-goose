@@ -71,7 +71,7 @@ class DocumentCleaner(object):
         docToClean = self.cleanStrongTags(docToClean)
         docToClean = self.removeDropCaps(docToClean)
         docToClean = self.removeScriptsAndStyles(docToClean)
-        docToClean = self.removeNodesViaRegEx(docToClean, self.captionPattern)
+        #docToClean = self.removeNodesViaRegEx(docToClean, self.captionPattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.googlePattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.entriesPattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.facebookPattern)
