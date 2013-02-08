@@ -228,6 +228,11 @@ class ContentExtractor(object):
                 tags.append(tag)
 
         return set(tags)
+    ################################################################################
+    ################################################################################
+    ###############                BEST NODE                    ####################
+    ################################################################################
+    ################################################################################
 
     def calculateBestNodeBasedOnClustering(self, article):
         doc = article.doc
@@ -269,6 +274,7 @@ class ContentExtractor(object):
                     boostScore = float((1.0 / startingBoost) * 50)
                     startingBoost += 1
             # numberOfNodes
+            #print numberOfNodes
             if numberOfNodes > 150:
                 if (numberOfNodes - i) <= bottomNodesForNegativeScore:
                     booster = float(bottomNodesForNegativeScore - (numberOfNodes - i))
@@ -528,7 +534,9 @@ class ContentExtractor(object):
         if not Parser.getElementsByTag(e, tag='a') and not Parser.getElementsByTag(e, tag='img'):
             self.updateScore(e, 11)
             return True
-        if (currentNodeScore < thresholdScore) and e.tag != 'td' and e.tag!='table':
+        if (currentNodeScore*1 < thresholdScore) and e.tag != 'td' and e.tag!='table':
+            #print currentNodeScore
+            #print thresholdScore
             return False
         return True
 
@@ -544,13 +552,14 @@ class ContentExtractor(object):
                 if self.isHighLinkDensity(e) \
                     or self.isTableTagAndNoParagraphsExist(e) \
                     or not self.isNodeScoreThreshholdMet(node, e):
+                        #Parser.getText3(e)
                         Parser.remove(e)
 
         for e in reversed(node):
             if e.tag == 'p' and list(e) == []:
-               if e.text is None or re.search('[^ \t\r\n]',e.text) == None:
-                   Parser.remove(e)
-                   continue
+                if e.text is None or re.search('[^ \t\r\n]',e.text) == None:
+                    Parser.remove(e)
+                    continue
             if e.tag not in ['h2','h3','h4']: break
             Parser.remove(e)
         return node

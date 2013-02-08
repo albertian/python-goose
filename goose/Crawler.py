@@ -79,7 +79,7 @@ class Crawler(object):
         # # before we do any calcs on the body itself let's clean up the document
         #Parser.getText2(article.doc)
         article.doc = docCleaner.clean(article)
-        Parser.getText2(article.doc)
+        #Parser.getText2(article.doc)
         # big stuff
         article.topNode = extractor.calculateBestNodeBasedOnClustering(article)
         #Parser.getText2(article.topNode)
@@ -95,7 +95,7 @@ class Crawler(object):
             #
 
             article.topNode = extractor.postExtractionCleanup(article.topNode)
-            #Parser.getText3(article.topNode)
+            #Parser.getText2(article.topNode)
             article.cleanedArticleText = outputFormatter.getFormattedText(article)
             #Parser.getText3(outputFormatter.getTopNode())
             

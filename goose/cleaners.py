@@ -41,7 +41,7 @@ class DocumentCleaner(object):
         "|source|legende|ajoutVideo|timestamp"
         )
         self.regExNotRemoveNodes = ("and|no|article|body|column|main|shadow|table")
-        self.regExImportantToDeleteNodes = ("noprint")
+        self.regExImportantToDeleteNodes = ("noprint|blockQuote|quote")
         self.regexpNS = "http://exslt.org/regular-expressions"
         self.queryNaughtyIDs = "//*[re:test(@id, '%s', 'i')]" % self.regExRemoveNodes
         self.queryNaughtyClasses = "//*[re:test(@class, '%s', 'i')]" % self.regExRemoveNodes
