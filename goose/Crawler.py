@@ -82,7 +82,8 @@ class Crawler(object):
         #Parser.getText2(article.doc)
         # big stuff
         article.topNode = extractor.calculateBestNodeBasedOnClustering(article)
-        #Parser.getText2(article.topNode)
+
+        Parser.getText2(article.topNode)
         #normal yet
         if article.topNode is not None:
             # TODO
@@ -91,7 +92,7 @@ class Crawler(object):
             if self.config.enableImageFetching:
                 imageExtractor = self.getImageExtractor(article)
                 article.topImage = imageExtractor.getBestImage(article.rawDoc, article.topNode)
-            #Parser.getText3(article.topNode)
+            #Parser.getText2(article.topNode)
             #
 
             article.topNode = extractor.postExtractionCleanup(article.topNode)
@@ -109,7 +110,7 @@ class Crawler(object):
     def getHTML(self, crawlCandidate, parsingCandidate):
         if crawlCandidate.rawHTML:
             return crawlCandidate.rawHTML
-        else:
+        else:                   
             # fetch HTML
             html = HtmlFetcher().getHtml(self.config, parsingCandidate.url)
             return html

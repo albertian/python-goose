@@ -21,6 +21,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import re
+import math
 from copy import deepcopy
 from urlparse import urlparse, urljoin
 from goose.utils import StringSplitter
@@ -285,7 +286,7 @@ class ContentExtractor(object):
 
             nodeText = Parser.getText(node)
             wordStats = self.stopwordsCls(language=self.language).getStopWordCount(nodeText)
-            upscore = int(wordStats.getStopWordCount() + boostScore)
+            upscore = int(wordStats.getStopWordCount() + 1.5*boostScore)
 
             # parent node
             parentNode = Parser.getParent(node)
@@ -310,8 +311,8 @@ class ContentExtractor(object):
         topNodeScore = -100000
         for e in parentNodes:
             score = self.getScore(e)
-            #Parser.getText3(e)
-            #print "    score="+str(score)+" topscore="+str(topNodeScore)
+            Parser.getText3(e)
+            print "    score="+str(score)+" topscore="+str(topNodeScore)
             if score > topNodeScore:
                 topNode = e
                 topNodeScore = score
@@ -524,17 +525,23 @@ class ContentExtractor(object):
         return False
 
     def isNodeScoreThreshholdMet(self, node, e):
-        topNodeScore = self.getScore(node)
-        currentNodeScore = self.getScore(e)
-        thresholdScore = float(topNodeScore * .08)
 
+        nodeText = Parser.getText(e)
+        wordStats = self.stopwordsCls(language=self.language).getStopWordCount(nodeText)
+        upscore = int(wordStats.getStopWordCount())
+        currentNodeScore=upscore;
+
+        #currentNodeScore = self.getScore(e)
+        topNodeScore = self.getScore(node)
+        thresholdScore = float(topNodeScore * .08)
+        
         if topNodeScore < 0 and currentNodeScore < 0:
             return True
 
         if not Parser.getElementsByTag(e, tag='a') and not Parser.getElementsByTag(e, tag='img'):
             self.updateScore(e, 11)
             return True
-        if (currentNodeScore*1 < thresholdScore) and e.tag != 'td' and e.tag!='table':
+        if (math.pow(currentNodeScore,1) < thresholdScore) and e.tag != 'td' and e.tag!='table':
             #print currentNodeScore
             #print thresholdScore
             return False
