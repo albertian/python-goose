@@ -21,7 +21,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 import re
-import math
 from copy import deepcopy
 from urlparse import urlparse, urljoin
 from goose.utils import StringSplitter
@@ -50,6 +49,7 @@ class ContentExtractor(object):
         self.config = config
         self.language = config.targetLanguage
         self.stopwordsCls = config.stopwordsCls
+        self.myFuckingNode=None
 
     def getLanguage(self, article):
         """\
@@ -277,6 +277,7 @@ class ContentExtractor(object):
             # numberOfNodes
             #print numberOfNodes
             if numberOfNodes > 150:
+                #print "DADADA"
                 if (numberOfNodes - i) <= bottomNodesForNegativeScore:
                     booster = float(bottomNodesForNegativeScore - (numberOfNodes - i))
                     boostScore = float(-pow(booster, float(2)))
@@ -286,7 +287,7 @@ class ContentExtractor(object):
 
             nodeText = Parser.getText(node)
             wordStats = self.stopwordsCls(language=self.language).getStopWordCount(nodeText)
-            upscore = int(wordStats.getStopWordCount() + 1.5*boostScore)
+            upscore = int(wordStats.getStopWordCount() + 1*boostScore)
 
             # parent node
             parentNode = Parser.getParent(node)
@@ -317,11 +318,15 @@ class ContentExtractor(object):
                 topNode = e
                 topNodeScore = score
                 #Parser.getText2(e)
-
+                
             if topNode is None:
                 topNode = e
+            if score==138:
+                self.myFuckingNode=e;
                 #Parser.getText2(e)
         #Parser.getText3(topNode)
+        #for a in topNode:
+        #    print self.getScore(a)
         return topNode
 
     def isOkToBoost(self, node):
@@ -525,25 +530,20 @@ class ContentExtractor(object):
         return False
 
     def isNodeScoreThreshholdMet(self, node, e):
-
-        nodeText = Parser.getText(e)
-        wordStats = self.stopwordsCls(language=self.language).getStopWordCount(nodeText)
-        upscore = int(wordStats.getStopWordCount())
-        currentNodeScore=upscore;
-
-        #currentNodeScore = self.getScore(e)
         topNodeScore = self.getScore(node)
+        currentNodeScore = self.getScore(e)
         thresholdScore = float(topNodeScore * .08)
-        
+
         if topNodeScore < 0 and currentNodeScore < 0:
             return True
 
         if not Parser.getElementsByTag(e, tag='a') and not Parser.getElementsByTag(e, tag='img'):
             self.updateScore(e, 11)
             return True
-        if (math.pow(currentNodeScore,1) < thresholdScore) and e.tag != 'td' and e.tag!='table':
+        if (currentNodeScore*1 < thresholdScore) and e.tag != 'td' and e.tag!='table':
             #print currentNodeScore
             #print thresholdScore
+            #print topNodeScore
             return False
         return True
 
@@ -552,8 +552,12 @@ class ContentExtractor(object):
         remove any divs that looks like non-content,
         clusters of links, or paras with no gusto
         """
-        node = self.addSiblings(targetNode)
+        #node = self.addSiblings(targetNode)
+        node=targetNode
+        #Parser.getText3(self.myFuckingNode)
         for e in node:
+            if e==self.myFuckingNode:
+                print "ururu"
             if e.tag in ['h2','h3','h4']: continue
             if e.tag not in ['p','pre','font']:
                 if self.isHighLinkDensity(e) \

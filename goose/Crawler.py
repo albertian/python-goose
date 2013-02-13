@@ -83,7 +83,7 @@ class Crawler(object):
         # big stuff
         article.topNode = extractor.calculateBestNodeBasedOnClustering(article)
 
-        Parser.getText2(article.topNode)
+        #Parser.getText2(article.topNode)
         #normal yet
         if article.topNode is not None:
             # TODO

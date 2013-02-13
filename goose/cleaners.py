@@ -257,36 +257,22 @@ class DocumentCleaner(object):
         divs = Parser.getElementsByTag(doc, tag=domType)
         tags = ['a', 'blockquote', 'dl', 'div', 'img', 'ol', 'p', 'pre', 'table', 'ul']
         i=0
-        #if domType=='div':
-        #    print "number of divs total="+str(len(divs))
-        #if domType=='div':   
-        #    Parser.getText3(doc)
         for div in divs:
-            #if domType=='div':   
-                #Parser.getText3(div)
             items = Parser.getElementsByTags(div, tags)
             if div is not None and len(items) == 0:
                 self.replaceElementsWithPara(doc, div)
                 badDivs += 1
             elif div is not None:
                 replaceNodes = self.getReplacementNodes(doc, div)
-                #print "="*50
                 #Parser.getText3(div)
-                #print "*"*50
                 div.clear()
                 if domType=='div':
                     i+=1
-                    
-                
                 for c, n in enumerate(replaceNodes):
                     div.insert(c, n)
+                    #Parser.getText3(div)
 
                 elseDivs += 1
-        ########ATTENTION PRINT##########
-        #if domType=='div':
-            #print "i="+str(i)
-        #if domType=='div':   
-            #Parser.getText3(doc)
         return doc
 
 
