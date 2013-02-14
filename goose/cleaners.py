@@ -71,7 +71,6 @@ class DocumentCleaner(object):
         docToClean = self.cleanStrongTags(docToClean)
         docToClean = self.removeDropCaps(docToClean)
         docToClean = self.removeScriptsAndStyles(docToClean)
-        #docToClean = self.removeNodesViaRegEx(docToClean, self.captionPattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.googlePattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.entriesPattern)
         docToClean = self.removeNodesViaRegEx(docToClean, self.facebookPattern)
@@ -264,14 +263,11 @@ class DocumentCleaner(object):
                 badDivs += 1
             elif div is not None:
                 replaceNodes = self.getReplacementNodes(doc, div)
-                #Parser.getText3(div)
                 div.clear()
                 if domType=='div':
                     i+=1
                 for c, n in enumerate(replaceNodes):
                     div.insert(c, n)
-                    #Parser.getText3(div)
-
                 elseDivs += 1
         return doc
 

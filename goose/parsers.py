@@ -162,20 +162,18 @@ class Parser(object):
     def getText(self, node):
         txts = [i for i in node.itertext()]
         return innerTrim(u' '.join(txts).strip())
+    
     @classmethod
-    def getText2(self, node):
+    def getTextAndWriteToFile(self, node):
         txts = [i for i in node.itertext()]
-        ###########ATTENTION PRINT######################
         f = codecs.open("log.txt",'wb','utf-8')
         for line in txts:
             f.write(line)
         f.close()
-        #print txts
         return innerTrim(u' '.join(txts).strip())
     @classmethod
-    def getText3(self, node):
+    def getTextAndShowInConsole(self, node):
         txts = [i for i in node.itertext()]
-        ###########ATTENTION PRINT######################
         print txts
         return innerTrim(u' '.join(txts).strip())
     @classmethod

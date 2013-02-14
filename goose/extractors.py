@@ -239,8 +239,6 @@ class ContentExtractor(object):
         doc = article.doc
         topNode = None
         nodesToCheck = self.getNodesToCheck(doc)
-        ###########ATTENTION PRINT######################
-        #print "Extractor.calculateBestNodeBasedOnClustering: namber nodestocheck="+str(len(nodesToCheck))
         startingBoost = float(1.0)
         cnt = 0
         i = 0
@@ -251,23 +249,16 @@ class ContentExtractor(object):
             nodeText = Parser.getText(node)
             wordStats = self.stopwordsCls(language=self.language).getStopWordCount(nodeText)
             highLinkDensity = self.isHighLinkDensity(node)
-            #print "node "+str(i)+"count="+str(wordStats.getStopWordCount())
-            #Parser.getText3(node)
-            
             
             if wordStats.getStopWordCount() > 2 and not highLinkDensity:
                 nodesWithText.append(node)
-                #Parser.getText3(node)
                 
 
         numberOfNodes = len(nodesWithText)
-        ###########ATTENTION######################
-        #print "Extractor.calculateBestNodeBasedOnClustering: namber of nodes with text="+str(numberOfNodes)
         negativeScoring = 0
         bottomNodesForNegativeScore = float(numberOfNodes) * 0.2
         
         for node in nodesWithText:
-            #Parser.getText3(node)
             boostScore = float(0)
             # boost
             if(self.isOkToBoost(node)):
@@ -275,7 +266,6 @@ class ContentExtractor(object):
                     boostScore = float((1.0 / startingBoost) * 50)
                     startingBoost += 1
             # numberOfNodes
-            #print numberOfNodes
             if numberOfNodes > 150:
                 if (numberOfNodes - i) <= bottomNodesForNegativeScore:
                     booster = float(bottomNodesForNegativeScore - (numberOfNodes - i))
@@ -311,17 +301,12 @@ class ContentExtractor(object):
         topNodeScore = -100000
         for e in parentNodes:
             score = self.getScore(e)
-            #Parser.getText3(e)
-            #print "    score="+str(score)+" topscore="+str(topNodeScore)
             if score > topNodeScore:
                 topNode = e
                 topNodeScore = score
-                #Parser.getText2(e)
 
             if topNode is None:
                 topNode = e
-                #Parser.getText2(e)
-        #Parser.getText3(topNode)
         return topNode
 
     def isOkToBoost(self, node):
@@ -420,7 +405,6 @@ class ContentExtractor(object):
             if wordStats.getStopWordCount() > 2 and not highLinkDensity:
                 numberOfParagraphs += 1
                 scoreOfParagraphs += wordStats.getStopWordCount()
-
         if numberOfParagraphs > 0:
             base = scoreOfParagraphs / numberOfParagraphs
 
@@ -464,29 +448,20 @@ class ContentExtractor(object):
 
         text = Parser.getText(e)
         words = text.split(' ')
-        numberOfWords = float(len(words))
+        
         sb = []
         for link in links:
             sb.append(Parser.getText(link))
 
         linkText = ''.join(sb)
         linkWords = linkText.split(' ')
-        numberOfLinkWords = float(len(linkWords))
+        numberOfWords = float(len(words))
         numberOfLinks = float(len(links))
-        linkDivisor = float(numberOfLinkWords / numberOfWords)
-        #score = float(linkDivisor * numberOfLinks)
+        numberOfLinkWords = float(len(linkWords))
         score=float((numberOfLinks**2)*numberOfLinkWords/numberOfWords)
-        ##########CHANGED################
-        #################################
-        #################################
         if score >= 5:
-            #if score<2.1:
-            #print 20*"="+str(score)+" words="+str(numberOfWords)+ " links="+str(numberOfLinks)+" link words="+str(numberOfLinkWords)
-            #Parser.getText3(e)
-            #print 50*"="
             return True
         return False
-        # return True if score > 1.0 else False
 
     def getScore(self, node):
         """\
@@ -511,39 +486,21 @@ class ContentExtractor(object):
             nodesToCheck += items
         return nodesToCheck
 
-    def isTableTagAndNoParagraphsExist(self, e):
-        return False
-        subParagraphs = Parser.getElementsByTag(e, tag='p')
-        for p in subParagraphs:
-            txt = Parser.getText(p)
-            if len(txt) < 25:
-                Parser.remove(p)
-
-        subParagraphs2 = Parser.getElementsByTag(e, tag='p')
-        if len(subParagraphs2) == 0 and e.tag is not "td":
-            return True
-        return False
+    
 
     def isNodeScoreThreshholdMet(self, node, e):
-
         nodeText = Parser.getText(e)
         wordStats = self.stopwordsCls(language=self.language).getStopWordCount(nodeText)
         upscore = int(wordStats.getStopWordCount())
         currentNodeScore=upscore;
-
-        #currentNodeScore = self.getScore(e)
         topNodeScore = self.getScore(node)
         thresholdScore = float(topNodeScore * .08)
-        
         if topNodeScore < 0 and currentNodeScore < 0:
             return True
-
         if not Parser.getElementsByTag(e, tag='a') and not Parser.getElementsByTag(e, tag='img'):
             self.updateScore(e, 11)
             return True
-        if (math.pow(currentNodeScore,1) < thresholdScore) and e.tag != 'td' and e.tag!='table':
-            #print currentNodeScore
-            #print thresholdScore
+        if (currentNodeScore < thresholdScore) and e.tag != 'td' and e.tag!='table':
             return False
         return True
 
@@ -557,9 +514,7 @@ class ContentExtractor(object):
             if e.tag in ['h2','h3','h4']: continue
             if e.tag not in ['p','pre','font']:
                 if self.isHighLinkDensity(e) \
-                    or self.isTableTagAndNoParagraphsExist(e) \
                     or not self.isNodeScoreThreshholdMet(node, e):
-                        #Parser.getText3(e)
                         Parser.remove(e)
 
         for e in reversed(node):

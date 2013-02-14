@@ -67,11 +67,9 @@ def getrawhtml(fname):
 
 def gettext(html):
     text = html.encode('ascii', 'replace')
-    #print text
     text = re.sub('[.?,\'\t\r\n]',' ',text)
     text = text.split()
     text = ' '.join(text)
-    #print text
     return text
 
 def createstats(html, root, sel, f, fname):
@@ -118,10 +116,8 @@ def checkfile(fname, f):
     total_len = excess_len
     etalon_words = 0
     html1 = html
-    #print html1
     parser = etree.HTMLParser()
     root = etree.parse(folder + "/annotated/" + fname, parser)
-    #print html
     res = createstats(html, root, "//*[@class='x-nc-sel2']", f, fname)
     html = res[4]
     etalon_words = res[0]+res[2]
